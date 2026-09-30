@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 150" width="1020" height="150" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<defs>
+  <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/>
+    <feOffset dy="1.5"/>
+    <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+    <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <marker id="head" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M1,1 L9,5 L1,9 Z" fill="#4b5563"/>
+  </marker>
+  <marker id="head-muted" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M1,1 L9,5 L1,9 Z" fill="#9ca3af"/>
+  </marker>
+</defs>
+<rect width="100%" height="100%" rx="12" fill="#ffffff"/>
+<rect x="20" y="30" width="210" height="84" rx="10" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="125.0" y="68.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2937" xml:space="preserve">Browser on laptop</text>
+<text x="125.0" y="87.0" text-anchor="middle" font-size="12.5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#6b7280" xml:space="preserve">127.0.0.1:18888</text>
+<rect x="405" y="30" width="210" height="84" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="510.0" y="68.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2937" xml:space="preserve">Jumphost</text>
+<text x="510.0" y="87.0" text-anchor="middle" font-size="12.5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#6b7280" xml:space="preserve">127.0.0.1:YOUR_PORT</text>
+<rect x="790" y="30" width="210" height="84" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="895.0" y="68.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2937" xml:space="preserve">Jupyter in a job</text>
+<text x="895.0" y="87.0" text-anchor="middle" font-size="12.5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#6b7280" xml:space="preserve">port 8888</text>
+<line x1="230" y1="72" x2="403" y2="72" stroke="#4b5563" stroke-width="1.6" marker-end="url(#head)"/>
+<rect x="286.7" y="61.0" width="59.599999999999994" height="20" rx="10" fill="#ffffff" stroke="#e5e7eb"/>
+<text x="316.5" y="75.5" text-anchor="middle" font-size="12" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#4b5563" xml:space="preserve">ssh -L</text>
+<line x1="615" y1="72" x2="788" y2="72" stroke="#4b5563" stroke-width="1.6" marker-end="url(#head)"/>
+<rect x="626.1" y="61.0" width="150.79999999999998" height="20" rx="10" fill="#ffffff" stroke="#e5e7eb"/>
+<text x="701.5" y="75.5" text-anchor="middle" font-size="12" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#4b5563" xml:space="preserve">runai port-forward</text>
+<text x="317" y="108" text-anchor="middle" font-size="11.5" fill="#6b7280" xml:space="preserve">run on your laptop</text>
+<text x="702" y="108" text-anchor="middle" font-size="11.5" fill="#6b7280" xml:space="preserve">run on the jumphost</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" width="900" height="440" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<defs>
+  <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+    <feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/>
+    <feOffset dy="1.5"/>
+    <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+    <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <marker id="head" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M1,1 L9,5 L1,9 Z" fill="#4b5563"/>
+  </marker>
+  <marker id="head-muted" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M1,1 L9,5 L1,9 Z" fill="#9ca3af"/>
+  </marker>
+</defs>
+<rect width="100%" height="100%" rx="12" fill="#ffffff"/>
+<rect x="30" y="30" width="420" height="260" rx="14" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="6 5"/>
+<text x="46" y="52" text-anchor="start" font-size="11" font-weight="700" fill="#64748b" xml:space="preserve">DEV JOB  ·  ONE TMUX PANE PER AGENT</text>
+<rect x="50" y="70" width="180" height="110" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="140.0" y="112.5" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2937" xml:space="preserve">Agent 1</text>
+<text x="140.0" y="131.5" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">worktree</text>
+<text x="140.0" y="148.5" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">renderer</text>
+<rect x="250" y="70" width="180" height="110" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="340.0" y="112.5" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2937" xml:space="preserve">Agent 2</text>
+<text x="340.0" y="131.5" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">worktree</text>
+<text x="340.0" y="148.5" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">algorithm</text>
+<text x="240" y="222" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">quick tests on the job's GPU</text>
+<text x="240" y="242" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">long runs go to training jobs</text>
+<rect x="560" y="40" width="300" height="58" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="710.0" y="65.0" text-anchor="middle" font-size="15" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#1f2937" xml:space="preserve">renderer-lr-001</text>
+<text x="710.0" y="84.0" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">training job, own GPU</text>
+<rect x="560" y="120" width="300" height="58" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="710.0" y="145.0" text-anchor="middle" font-size="15" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#1f2937" xml:space="preserve">renderer-lr-002</text>
+<text x="710.0" y="164.0" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">training job, own GPU</text>
+<rect x="560" y="200" width="300" height="58" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+<text x="710.0" y="225.0" text-anchor="middle" font-size="15" font-weight="600" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#1f2937" xml:space="preserve">algorithm-run-01</text>
+<text x="710.0" y="244.0" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">training job, own GPU</text>
+<line x1="450" y1="110" x2="558" y2="69" stroke="#4b5563" stroke-width="1.6" marker-end="url(#head)"/>
+<line x1="450" y1="140" x2="558" y2="149" stroke="#4b5563" stroke-width="1.6" marker-end="url(#head)"/>
+<rect x="472.6" y="133.05" width="52.0" height="20" rx="10" fill="#ffffff" stroke="#e5e7eb"/>
+<text x="498.6" y="147.55" text-anchor="middle" font-size="12" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" fill="#4b5563" xml:space="preserve">train</text>
+<line x1="450" y1="170" x2="558" y2="229" stroke="#4b5563" stroke-width="1.6" marker-end="url(#head)"/>
+<path d="M30,340 V410 A415.0,10 0 0 0 860,410 V340" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5" filter="url(#shadow)"/>
+<ellipse cx="445.0" cy="340" rx="415.0" ry="10" fill="#fafafa" stroke="#6b7280" stroke-width="1.5"/>
+<text x="445.0" y="383.0" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2937" xml:space="preserve">outputs/MY_PROJECT/runs/</text>
+<text x="445.0" y="402.0" text-anchor="middle" font-size="12.5" fill="#6b7280" xml:space="preserve">one folder per run: log.txt, info.txt, code/, your results</text>
+<line x1="710" y1="258" x2="710" y2="334" stroke="#9ca3af" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#head-muted)"/>
+<rect x="718.15" y="286" width="103.7" height="20" rx="10" fill="#ffffff" stroke="#e5e7eb"/>
+<text x="770" y="300.5" text-anchor="middle" font-size="12" fill="#4b5563" xml:space="preserve">logs, results</text>
+<line x1="240" y1="290" x2="240" y2="334" stroke="#9ca3af" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#head-muted)"/>
+<rect x="251.6" y="301" width="96.80000000000001" height="20" rx="10" fill="#ffffff" stroke="#e5e7eb"/>
+<text x="300" y="315.5" text-anchor="middle" font-size="12" fill="#4b5563" xml:space="preserve">read results</text>
+</svg>

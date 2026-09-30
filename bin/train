@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# train: submit a command that keeps running after you log out.
+# Custom command from the RCP tutorial. Works on the jumphost and inside jobs.
+#
+# Usage:   train JOB_NAME COMMAND [ARGS...]
+# Example: train train-01 .venv/bin/python train.py --epochs 10
+#
+# Inside a project with its own rcp/ folder, that project's settings are used.
+# Anywhere else, the tutorial's defaults are used, starting in the current folder.
+set -euo pipefail
+tutorial=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)
+
+dir=$PWD
+while [[ "$dir" != / && ! -f "$dir/rcp/project.env" ]]; do
+    dir=$(dirname "$dir")
+done
+if [[ -f "$dir/rcp/project.env" ]]; then
+    rcp=$dir/rcp
+else
+    rcp=$tutorial/rcp
+    export RCP_WORK_DIR=$PWD
+fi
+
+exec bash "$rcp/train.sh" "$@"

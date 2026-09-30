@@ -1,0 +1,167 @@
+#!/usr/bin/env bash
+# rcp-init: add the RCP workflow to the Git repository you are in, or update it.
+# Custom command from the RCP tutorial. Safe to run again: it never deletes anything,
+# keeps the project's rcp/project.env, and only adds what is missing.
+#
+# Usage: rcp-init      (from anywhere inside the repository)
+#
+# It sets up:
+#   rcp/                    the job scripts (updated; project.env is kept)
+#   AGENTS.md               the RCP notes for coding assistants (added or refreshed)
+#   .claude/settings.json   Claude Code permissions (missing rules merged in)
+#   .gitignore              .claude/worktrees/
+set -euo pipefail
+tutorial=$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)
+src=$tutorial/rcp
+
+if ! repo=$(git rev-parse --show-toplevel 2>/dev/null); then
+    echo "Run this from inside a Git repository (git init first, or cd into your project)." >&2
+    exit 2
+fi
+if [[ "$(readlink -f "$repo")" == "$(readlink -f "$tutorial")" ]]; then
+    echo "This is the tutorial itself. Run rcp-init from your project's folder." >&2
+    exit 2
+fi
+cd "$repo"
+echo "Project: $repo"
+changed=()
+
+# 1. rcp/: copy it, or update the scripts and keep project.env.
+if [[ ! -d rcp ]]; then
+    cp -r "$src" rcp
+    echo "  rcp/: added"
+    changed+=(rcp)
+else
+    updated=0
+    for file in "$src"/*; do
+        name=$(basename "$file")
+        if [[ "$name" == project.env && -f rcp/project.env ]]; then
+            continue
+        fi
+        if ! cmp -s "$file" "rcp/$name"; then
+            cp "$file" "rcp/$name"
+            updated=$((updated + 1))
+        fi
+    done
+    if (( updated )); then
+        echo "  rcp/: $updated file(s) updated (your project.env is kept)"
+        changed+=(rcp)
+    else
+        echo "  rcp/: already up to date"
+    fi
+    old=()
+    for file in rcp/*; do
+        [[ -e "$src/$(basename "$file")" ]] || old+=("$file")
+    done
+    if (( ${#old[@]} )); then
+        echo "  rcp/: no longer used, you can delete: ${old[*]}"
+    fi
+fi
+
+# 2. Notes for coding assistants.
+notes=$src/agent-instructions.md
+header='## Running on the RCP cluster'
+add_notes() {
+    local file=$1
+    if grep -qxF "$header" "$file"; then
+        # Replace our section (up to the next "## " heading) with the current version.
+        awk -v header="$header" -v notes="$notes" '
+            $0 == header { while ((getline line < notes) > 0) print line; skipping = 1; next }
+            skipping && /^## / { skipping = 0; print "" }
+            !skipping { print }
+        ' "$file" > "$file.rcp-tmp"
+        if cmp -s "$file" "$file.rcp-tmp"; then
+            rm "$file.rcp-tmp"
+            echo "  $file: RCP notes already up to date"
+        else
+            mv "$file.rcp-tmp" "$file"
+            echo "  $file: RCP notes updated"
+            changed+=("$file")
+        fi
+    elif grep -q 'RCP' "$file"; then
+        echo "  $file: mentions RCP already, left unchanged. Compare it with rcp/agent-instructions.md."
+    else
+        printf '\n' >> "$file"
+        cat "$notes" >> "$file"
+        echo "  $file: RCP notes added at the end"
+        changed+=("$file")
+    fi
+}
+# The notes go in AGENTS.md, read by Codex and by Claude Code (which reads AGENTS.md
+# when the project has no CLAUDE.md).
+if [[ -f AGENTS.md ]]; then
+    add_notes AGENTS.md
+else
+    cp "$notes" AGENTS.md
+    echo "  AGENTS.md: created with the RCP notes"
+    changed+=(AGENTS.md)
+fi
+# A CLAUDE.md from an older project hides AGENTS.md from Claude Code.
+if [[ -f CLAUDE.md ]]; then
+    if grep -qxF '@AGENTS.md' CLAUDE.md; then
+        echo "  CLAUDE.md: imports AGENTS.md, fine"
+    elif grep -qxF "$header" CLAUDE.md; then
+        add_notes CLAUDE.md
+    else
+        echo "  CLAUDE.md: Claude Code reads it instead of AGENTS.md. Add the line @AGENTS.md to it (or append the notes: cat rcp/agent-instructions.md >> CLAUDE.md)."
+    fi
+fi
+
+# 3. Claude Code settings: copy, or merge the missing rules in.
+mkdir -p .claude
+if [[ ! -f .claude/settings.json ]]; then
+    cp "$src/claude-settings.json" .claude/settings.json
+    echo "  .claude/settings.json: added"
+    changed+=(.claude/settings.json)
+elif command -v python3 >/dev/null; then
+    result=$(python3 - "$src/claude-settings.json" .claude/settings.json <<'PY'
+import json, sys
+ours, path = json.load(open(sys.argv[1])), sys.argv[2]
+theirs = json.load(open(path))
+added = 0
+perms = theirs.setdefault("permissions", {})
+for key in ("allow", "deny"):
+    rules = perms.setdefault(key, [])
+    for rule in ours["permissions"][key]:
+        if rule not in rules:
+            rules.append(rule)
+            added += 1
+if "baseRef" not in theirs.setdefault("worktree", {}):
+    theirs["worktree"]["baseRef"] = ours["worktree"]["baseRef"]
+    added += 1
+if added:
+    with open(path, "w") as f:
+        json.dump(theirs, f, indent=2)
+        f.write("\n")
+print(added)
+PY
+    ) || result=error
+    if [[ "$result" == error ]]; then
+        echo "  .claude/settings.json: could not read it (not valid JSON?). Merge rcp/claude-settings.json by hand."
+    elif (( result )); then
+        echo "  .claude/settings.json: $result rule(s) added, yours kept"
+        changed+=(.claude/settings.json)
+    else
+        echo "  .claude/settings.json: already has all the rules"
+    fi
+else
+    echo "  .claude/settings.json: already exists. Copy the rules from rcp/claude-settings.json by hand (python3 not found)"
+fi
+
+# 4. Git ignores the worktrees of parallel agents.
+if ! grep -qxF '.claude/worktrees/' .gitignore 2>/dev/null; then
+    printf '.claude/worktrees/\n' >> .gitignore
+    echo "  .gitignore: added .claude/worktrees/"
+    changed+=(.gitignore)
+else
+    echo "  .gitignore: already ignores .claude/worktrees/"
+fi
+
+if (( ${#changed[@]} )); then
+    echo
+    echo "Check the changes with git diff, then commit them:"
+    printf '  git add %s && git commit -m "Add RCP workflow"\n' "${changed[*]}"
+else
+    echo
+    echo "Nothing to change."
+fi

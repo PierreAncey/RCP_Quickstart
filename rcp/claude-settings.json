@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash rcp/train.sh:*)",
+      "Bash(bash rcp/wait.sh:*)",
+      "Bash(bash rcp/stop.sh:*)",
+      "Bash(runai list:*)",
+      "Bash(runai describe job:*)",
+      "Bash(runai logs:*)"
+    ],
+    "deny": [
+      "Bash(runai delete:*)",
+      "Bash(runai submit:*)",
+      "Bash(rm -rf:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git branch -D:*)",
+      "Bash(git checkout --:*)",
+      "Bash(git checkout .:*)",
+      "Bash(git restore:*)",
+      "Bash(git stash drop:*)",
+      "Bash(git stash clear:*)",
+      "Bash(git worktree remove --force:*)",
+      "Edit(//mnt/cvlab/scratch/cvlab/home/**/datasets/**)"
+    ]
+  },
+  "worktree": {
+    "baseRef": "head"
+  }
+}

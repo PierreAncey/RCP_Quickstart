@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# windows: open N panes in a tmux grid, each running an app. Custom command from the
+# RCP tutorial; run it inside a job (dev) to use coding assistants.
+#
+# Usage: windows [N] [APP]
+#   N    number of panes, 1 to 16 (default 4)
+#   APP  claude (default), codex, half (half Claude, half Codex; N must be even),
+#        or any other command, e.g. bash
+#
+# Examples: windows · windows 6 codex · windows 2 half
+# The panes open in the current folder. When an app exits, its pane keeps a shell.
+# Come back later with: tmux attach -t agents (the name is printed when it starts).
+set -euo pipefail
+n=${1:-4}
+app=${2:-claude}
+
+if [[ ! "$n" =~ ^[0-9]+$ ]] || (( n < 1 || n > 16 )); then
+    echo "N must be a number from 1 to 16, e.g. windows 4 claude" >&2
+    exit 2
+fi
+if ! command -v tmux >/dev/null; then
+    echo "tmux is not installed in this image." >&2
+    exit 1
+fi
+
+apps=()
+case "$app" in
+    half)
+        if (( n % 2 != 0 )); then
+            echo "half needs an even number of panes, e.g. windows 4 half" >&2
+            exit 2
+        fi
+        for (( i = 0; i < n; i++ )); do
+            if (( i < n / 2 )); then apps+=(claude); else apps+=(codex); fi
+        done ;;
+    *)
+        for (( i = 0; i < n; i++ )); do apps+=("$app"); done ;;
+esac
+
+if [[ -z "${RCP_JOB:-}" ]] && [[ " ${apps[*]} " == *" claude "* || " ${apps[*]} " == *" codex "* ]]; then
+    echo "Coding assistants can't run on the jumphost. Start a job first with: dev" >&2
+    exit 1
+fi
+
+# A new tmux session per grid: agents, agents-2, ...
+session=agents
+i=2
+while tmux has-session -t "=$session" 2>/dev/null; do
+    session=agents-$i
+    i=$((i + 1))
+done
+
+# Each pane runs the app, then stays open with a shell.
+tmux new-session -d -s "$session" -c "$PWD" "${apps[0]}; exec bash"
+for (( i = 1; i < n; i++ )); do
+    tmux split-window -t "$session" -c "$PWD" "${apps[i]}; exec bash"
+    tmux select-layout -t "$session" tiled >/dev/null
+done
+tmux select-pane -t "$session:0.0"
+
+echo "Started $n panes in tmux session '$session'. Come back later with: tmux attach -t $session"
+if [[ -n "${TMUX:-}" ]]; then
+    tmux switch-client -t "$session"
+elif [[ -t 0 && -t 1 ]]; then
+    exec tmux attach -t "$session"
+fi
