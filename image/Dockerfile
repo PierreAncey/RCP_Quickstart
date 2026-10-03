@@ -8,11 +8,14 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
     python3 python3-dev python3-venv python3-pip python-is-python3 \
     git git-lfs openssh-client rsync curl wget ca-certificates \
     bash-completion less nano vim-tiny tmux htop procps psmisc \
-    file ripgrep jq tree unzip zip xz-utils bzip2 \
+    file ripgrep jq tree unzip zip xz-utils bzip2 bubblewrap \
     iproute2 iputils-ping dnsutils netcat-openbsd \
     libssl-dev libffi-dev libopenblas-dev libhdf5-dev \
     libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 ffmpeg \
     && rm -rf /var/lib/apt/lists/*
+
+# Let Codex's system bubblewrap create namespaces on Ubuntu 24.04.
+RUN chmod u+s /usr/bin/bwrap
 
 # Python tools installed at build time.
 RUN python3 -m venv /opt/venv \
