@@ -138,6 +138,10 @@ export KUBECONFIG=$state/.kube/rcp-config
 export HISTFILE=$state/.bash_history
 export npm_config_prefix=$state/.local
 export SUPPRESS_DEPRECATION_MESSAGE=true   # hides runai's "CLI v1 is now deprecated" notice
+# UTF-8 everywhere, so tmux and the coding assistants draw their characters correctly.
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
+alias tmux='tmux -u'
 case ":\$PATH:" in *":$state/.local/bin:"*) ;; *) export PATH="\$PATH:$state/.local/bin" ;; esac
 # The tutorial's commands: dev, train, windows and rcp-init. Run with bash, so file permissions don't matter.
 dev() { bash "$tutorial_dir/bin/dev" "\$@"; }

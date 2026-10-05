@@ -51,7 +51,7 @@ while tmux has-session -t "=$session" 2>/dev/null; do
 done
 
 # Each pane runs the app, then stays open with a shell.
-tmux new-session -d -s "$session" -c "$PWD" "${apps[0]}; exec bash"
+tmux -u new-session -d -s "$session" -c "$PWD" "${apps[0]}; exec bash"
 for (( i = 1; i < n; i++ )); do
     tmux split-window -t "$session" -c "$PWD" "${apps[i]}; exec bash"
     tmux select-layout -t "$session" tiled >/dev/null
@@ -62,5 +62,5 @@ echo "Started $n panes in tmux session '$session'. Come back later with: tmux at
 if [[ -n "${TMUX:-}" ]]; then
     tmux switch-client -t "$session"
 elif [[ -t 0 && -t 1 ]]; then
-    exec tmux attach -t "$session"
+    exec tmux -u attach -t "$session"
 fi
