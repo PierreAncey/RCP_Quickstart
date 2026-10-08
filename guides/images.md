@@ -1,6 +1,6 @@
 # Images
 
-An image is the software environment of a job: the operating system, CUDA, Python and libraries. It's built once and uploaded to a registry, [Harbor](https://registry.rcp.epfl.ch), and every job downloads it from there. You log in to Harbor with your GASPAR username. Most students use the lab image, `registry.rcp.epfl.ch/cvlab-pancey/base:0.3` (the default in `rcp/project.env`), and never build their own.
+An image is the software environment of a job: the operating system, CUDA, Python and libraries. It's built once and uploaded to a registry, [Harbor](https://registry.rcp.epfl.ch), and every job downloads it from there. You log in to Harbor with your GASPAR username. Most students use the lab image, `registry.rcp.epfl.ch/cvlab-pancey/base:0.4` (the default in `rcp/project.env`), and never build their own.
 
 ---
 

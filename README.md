@@ -175,7 +175,7 @@ Copy the token straight away, because you only get to see it once. Use HTTPS rep
 
 </details>
 
-Jobs run on the lab's default image, `registry.rcp.epfl.ch/cvlab-pancey/base:0.3`. It comes with CUDA, cuDNN, TensorRT, Python, uv and JupyterLab.
+Jobs run on the lab's default image, `registry.rcp.epfl.ch/cvlab-pancey/base:0.4`. It comes with CUDA, cuDNN, TensorRT, Python, uv and JupyterLab.
 
 <details>
 <summary>Did your supervisor give you a different image?</summary>
