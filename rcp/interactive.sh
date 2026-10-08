@@ -2,14 +2,14 @@
 # Start a job for interactive work and open a shell in it. Run it on the jumphost.
 # Run it again to get another shell in the same job.
 #
-# Usage: bash rcp/interactive.sh [JOB_NAME]      (default name: dev)
-# Stop:  runai delete job dev
+# Usage: bash rcp/interactive.sh [JOB_NAME]      (default: DEV_JOB in project.env, else dev)
+# Stop:  runai delete job JOB_NAME
 if [[ -n "${RCP_JOB:-}" ]]; then
     echo "You are already inside the job $RCP_JOB. Run this on the jumphost." >&2
     exit 5
 fi
 source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
-name=${1:-dev}
+name=${1:-${DEV_JOB:-dev}}
 check_name "$name"
 
 # A job with this name that is still being deleted must be gone before we start a new one.

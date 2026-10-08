@@ -2,7 +2,7 @@
 # dev: start your interactive job (or reconnect to it) and open a shell in the
 # current folder. Custom command from the RCP tutorial, run it on the jumphost.
 #
-# Usage: dev [JOB_NAME]      (default name: dev)
+# Usage: dev [JOB_NAME]      (default: DEV_JOB in the project's rcp/project.env, else dev)
 #
 # Inside a project with its own rcp/ folder, that project's settings are used.
 # Anywhere else, the tutorial's defaults are used, starting in the current folder.
