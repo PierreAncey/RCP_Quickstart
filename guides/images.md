@@ -25,7 +25,7 @@ Then use `dev` and `train` from that folder as usual. Every code change means bu
 
 Build an image when you need system packages, or a large Python environment that is slow to install on the NAS. You'll need [Docker](https://docs.docker.com/get-docker/) on your laptop, since the jumphost can't build images.
 
-[image/Dockerfile](../image/Dockerfile) is a starting point with CUDA and cuDNN, build tools, common command-line tools, Python, uv and JupyterLab. It contains no code. Add your packages, then build and push. `LAB_PROJECT` is the lab's project on Harbor, where images are stored. Ask your supervisor which one to use.
+[image/Dockerfile](../image/Dockerfile) is a starting point with CUDA, cuDNN and TensorRT, build tools, common command-line tools, Python, uv and JupyterLab. It contains no code. Add your packages, then build and push. `LAB_PROJECT` is the lab's project on Harbor, where images are stored. Ask your supervisor which one to use.
 
 ```bash
 docker login registry.rcp.epfl.ch
