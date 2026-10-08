@@ -1,5 +1,5 @@
 # Generic GPU development environment. Code and data stay on the NAS.
-FROM nvidia/cuda:13.4.2-tensorrt-devel-ubuntu24.04
+FROM nvidia/cuda:13.4.2-cudnn-devel-ubuntu24.04
 
 # Install system tools at build time. Job sessions do not need apt or sudo.
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -41,8 +41,20 @@ RUN python3 -m venv /opt/venv \
     && /opt/venv/bin/python -m pip install --no-cache-dir jupyterlab uv
 ENV PATH="/opt/venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 
+# TensorRT from NVIDIA's tar file (C++ headers, libs, trtexec, Python wheel).
+# The nvidia/cuda tensorrt tags are arm64-only, and apt lags behind the latest release.
+ARG TRT_VERSION=11.3.0 TRT_BUILD=11.3.0.99 TRT_CUDA=13.4
+ENV TENSORRT_DIR=/opt/tensorrt PATH="/opt/tensorrt/bin:$PATH"
+RUN mkdir -p /opt/tensorrt \
+    && curl -fsSL "https://developer.download.nvidia.com/compute/machine-learning/tensorrt/${TRT_VERSION}/tars/TensorRT-Enterprise-${TRT_BUILD}-Linux-x86_64-cuda-${TRT_CUDA}-Release-external.tar.zst" \
+    | tar -I zstd -x -C /opt/tensorrt --strip-components=1 \
+    && echo /opt/tensorrt/lib > /etc/ld.so.conf.d/tensorrt.conf && ldconfig \
+    && /opt/venv/bin/python -m pip install --no-cache-dir /opt/tensorrt/python/tensorrt-*-cp312-none-linux_x86_64.whl \
+    && /opt/venv/bin/python -c "import tensorrt; print(tensorrt.__version__)"
+
 # The job's user can set the link without root permissions.
-# Build caches (cargo registry/targets, ccache, uv) default to the NAS so they persist.
+# Build and compile caches (cargo registry/targets, ccache, uv, Triton kernels,
+# torch.compile/Inductor) default to the NAS so they persist across jobs.
 RUN mkdir -m 1777 /run/rcp && ln -s /run/rcp/home /app \
     && printf '%s\n' \
     '#!/bin/bash' \
@@ -53,6 +65,8 @@ RUN mkdir -m 1777 /run/rcp && ln -s /run/rcp/home /app \
     'export CARGO_HOME="${CARGO_HOME:-$NAS_HOME/.cache/cargo}"' \
     'export CCACHE_DIR="${CCACHE_DIR:-$NAS_HOME/.cache/ccache}"' \
     'export UV_CACHE_DIR="${UV_CACHE_DIR:-$NAS_HOME/.cache/uv}"' \
+    'export TRITON_CACHE_DIR="${TRITON_CACHE_DIR:-$NAS_HOME/.cache/triton}"' \
+    'export TORCHINDUCTOR_CACHE_DIR="${TORCHINDUCTOR_CACHE_DIR:-$NAS_HOME/.cache/torchinductor}"' \
     'cd -- "${WORK_DIR:-/app}"' \
     'exec "$@"' \
     > /usr/local/bin/rcp-entrypoint \
