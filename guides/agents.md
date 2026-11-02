@@ -1,6 +1,6 @@
 # Coding assistants
 
-Coding assistants like Claude Code and Codex are becoming more popular and more capable every month. They help most when they can do more than edit files, like running your code on a real GPU, launching experiments and reading the results. This setup lets them do that.
+Coding assistants like Claude Code, Codex and Antigravity are becoming more popular and more capable every month. They help most when they can do more than edit files, like running your code on a real GPU, launching experiments and reading the results. This setup lets them do that.
 
 The assistants run inside your `dev` job, not on the jumphost. From there they can run your code on the GPU and handle training jobs for you: start them, follow them and stop them.
 
@@ -23,12 +23,12 @@ Then, inside the job:
 
 ```bash
 tmux new -A -s agent     # keeps the assistant running if your connection drops
-claude                   # or: codex
+claude                   # or: codex, agy
 ```
 
 If your connection drops, run `dev` and `tmux new -A -s agent` again and you'll be back in the same session.
 
-The `dev` job stops after 12 hours. When that happens, start it again and pick up the last conversation with `claude --continue` (or `codex resume`).
+The `dev` job stops after 12 hours. When that happens, start it again and pick up the last conversation with `claude --continue` (or `codex resume`, `agy --continue`).
 
 ---
 
@@ -40,7 +40,7 @@ On its own, the assistant has no idea it's running on a cluster. `rcp/agent-inst
 - how to start, follow, read and stop training jobs, and what each exit code means
 - GPUs are shared, so it should stop training jobs as soon as they're done, but never its own job
 
-Assistants read their instructions from `AGENTS.md` at the root of the project. Codex has always done this. Since September 2026 (version 2.1.277), Claude Code reads `AGENTS.md` too, the same way as its own `CLAUDE.md`, when the project has no `CLAUDE.md`. So one file works for both.
+Assistants read their instructions from `AGENTS.md` at the root of the project. Codex has always done this, and so does Antigravity. Since September 2026 (version 2.1.277), Claude Code reads `AGENTS.md` too, the same way as its own `CLAUDE.md`, when the project has no `CLAUDE.md`. So one file works for all three.
 
 The quickest way is to run `rcp-init` from the project folder. It adds or refreshes the notes, the Claude Code settings below and the worktree line in `.gitignore`, and it won't overwrite anything of yours. **If you ran `rcp-init`, skip to [Several agents at once](#several-agents-at-once).**
 
@@ -121,6 +121,7 @@ Don't overwrite it. Open both files and copy the lines under `"allow"` and `"den
 ```bash
 windows               # 4 panes with Claude Code (the default)
 windows 6 codex       # 6 panes with Codex
+windows 3 agy         # 3 panes with Antigravity
 windows 2 half        # half Claude Code, half Codex (the number must be even)
 windows 4 bash        # 4 plain shells, to start whatever you want in each
 ```

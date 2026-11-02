@@ -59,7 +59,7 @@ Want several terminals side by side, say one running a script, one watching `nvi
 
 ```bash
 windows 4 bash        # 4 plain terminals
-windows 2 claude      # 2 Claude Code sessions (or codex, or half for one of each)
+windows 2 claude      # 2 Claude Code sessions (or codex, or agy, or half for one Claude Code and one Codex)
 ```
 
 If your connection drops, run `dev` again, then `tmux attach -t agents` to get the grid back. The [Coding assistants](agents.md#several-agents-at-once) guide has more on running several assistants at once.
@@ -153,4 +153,4 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ## Coding assistants
 
-To use Claude Code or Codex in your project, see [Coding assistants](agents.md).
+To use Claude Code, Codex or Antigravity in your project, see [Coding assistants](agents.md).

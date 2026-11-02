@@ -1,6 +1,6 @@
 # Images
 
-An image is the software environment of a job: the operating system, CUDA, Python and libraries. It's built once and uploaded to a registry, [Harbor](https://registry.rcp.epfl.ch), and every job downloads it from there. You log in to Harbor with your GASPAR username. Most students use the lab image, `registry.rcp.epfl.ch/cvlab-pancey/base:0.4` (the default in `rcp/project.env`), and never build their own.
+An image is the software environment of a job: the operating system, CUDA, Python and libraries. It's built once and uploaded to a registry, [Harbor](https://registry.rcp.epfl.ch), and every job downloads it from there. You log in to Harbor with your GASPAR username. Most students use the lab image, `registry.rcp.epfl.ch/cvlab-pancey/base:0.5` (the default in `rcp/project.env`), and never build their own.
 
 ---
 
@@ -25,7 +25,7 @@ Then use `dev` and `train` from that folder as usual. Every code change means bu
 
 Build an image when you need system packages, or a large Python environment that is slow to install on the NAS. You'll need [Docker](https://docs.docker.com/get-docker/) on your laptop, since the jumphost can't build images.
 
-[image/Dockerfile](../image/Dockerfile) is a starting point with CUDA, cuDNN and TensorRT, build tools, common command-line tools, Python, uv and JupyterLab. It contains no code. Add your packages, then build and push. `LAB_PROJECT` is the lab's project on Harbor, where images are stored. Ask your supervisor which one to use.
+[image/Dockerfile](../image/Dockerfile) is a starting point with CUDA, cuDNN and TensorRT, build tools, common command-line tools, Python 3.12 (the default) and 3.10, Node.js, uv and JupyterLab. It contains no code. Add your packages, then build and push. `LAB_PROJECT` is the lab's project on Harbor, where images are stored. Ask your supervisor which one to use.
 
 ```bash
 docker login registry.rcp.epfl.ch
@@ -34,6 +34,8 @@ docker push registry.rcp.epfl.ch/LAB_PROJECT/MY_IMAGE:0.1
 ```
 
 Put the new address in `IMAGE` in `rcp/project.env`. Give every build a new tag (`0.2`, `0.3`, …) so that running jobs keep the version they started with.
+
+An older `.venv` doesn't work with image `0.5`, even though Python is still 3.12 by default: it starts on the system's Python 3.14 and can't find its packages. Recreate it when you switch: `uv venv --system-site-packages --clear && uv pip install -r requirements.txt`. For Python 3.10, add `--python 3.10` to `uv venv`.
 
 <details>
 <summary>Your Harbor project is private?</summary>

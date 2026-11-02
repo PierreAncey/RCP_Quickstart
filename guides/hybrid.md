@@ -8,7 +8,7 @@ Some people prefer writing code on their laptop with a local assistant and only 
 
 ## Keep one set of notes
 
-Coding assistants don't share memory between machines, so keep what they need to know in the repository, in `AGENTS.md`. Both Codex and Claude Code read it. Put in what the project does, how to run the tests and the cluster notes from `rcp/agent-instructions.md`, then add a short section at the end:
+Coding assistants don't share memory between machines, so keep what they need to know in the repository, in `AGENTS.md`. Codex, Claude Code and Antigravity all read it. Put in what the project does, how to run the tests and the cluster notes from `rcp/agent-instructions.md`, then add a short section at the end:
 
 ```markdown
 ## Handoff

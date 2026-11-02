@@ -10,7 +10,7 @@ These scripts run this project on the EPFL RCP cluster. Once the RCP tutorial is
 | `wait.sh` | Waits until a job is running or finished. |
 | `stop.sh` | Deletes one of this project's training jobs. Its output is kept. |
 | `logged.sh`, `common.sh` | Helpers for the other scripts. |
-| `agent-instructions.md` | Notes for coding assistants. Add them to `AGENTS.md`, which Codex and Claude Code both read. |
+| `agent-instructions.md` | Notes for coding assistants. Add them to `AGENTS.md`, which Codex, Claude Code and Antigravity all read. |
 | `claude-settings.json` | Claude Code permissions. Lets the assistant run job commands without asking, and blocks the usual ways of deleting jobs or data, plus Git commands that discard work. |
 
 ---

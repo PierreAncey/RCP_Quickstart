@@ -4,10 +4,10 @@
 #
 # Usage: windows [N] [APP]
 #   N    number of panes, 1 to 16 (default 4)
-#   APP  claude (default), codex, half (half Claude, half Codex; N must be even),
+#   APP  claude (default), codex, agy, half (half Claude, half Codex; N must be even),
 #        or any other command, e.g. bash
 #
-# Examples: windows · windows 6 codex · windows 2 half
+# Examples: windows · windows 6 codex · windows 3 agy · windows 2 half
 # The panes open in the current folder. When an app exits, its pane keeps a shell.
 # Come back later with: tmux attach -t agents (the name is printed when it starts).
 set -euo pipefail
@@ -37,7 +37,7 @@ case "$app" in
         for (( i = 0; i < n; i++ )); do apps+=("$app"); done ;;
 esac
 
-if [[ -z "${RCP_JOB:-}" ]] && [[ " ${apps[*]} " == *" claude "* || " ${apps[*]} " == *" codex "* ]]; then
+if [[ -z "${RCP_JOB:-}" ]] && [[ " ${apps[*]} " == *" claude "* || " ${apps[*]} " == *" codex "* || " ${apps[*]} " == *" agy "* ]]; then
     echo "Coding assistants can't run on the jumphost. Start a job first with: dev" >&2
     exit 1
 fi

@@ -94,7 +94,7 @@ log_event() {
 
 # Usage: submit_job NAME START_DIR [MORE RUNAI OPTIONS] --command -- COMMAND...
 # The NAS is mounted at the same path inside the job as on the jumphost.
-# HOME is $NAS_HOME/.home, so logins, tools (uv, Claude, Codex, runai) and caches persist.
+# HOME is $NAS_HOME/.home, so logins, tools (uv, Claude, Codex, Antigravity, runai) and caches persist.
 # Build and compile caches (cargo, ccache, uv, Triton, torch.compile) live in
 # $NAS_HOME/.cache. They are set here because --command bypasses the image entrypoint.
 submit_job() {

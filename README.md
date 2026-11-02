@@ -25,7 +25,7 @@ RCP is EPFL's shared GPU cluster, a big pool of GPU machines used by many labs. 
 | **Cluster** | A lot of computers managed together and shared by many users. You don't choose a machine. The cluster finds free resources for you. |
 | **Terminal / shell** | The window where you type commands. Every command runs on one specific computer: your laptop, the jumphost, or inside a job. |
 | **SSH** | The command that opens a terminal on a remote computer. You reach the jumphost with `ssh rcp`. |
-| **Jumphost** | The shared computer you log into. You edit code and start jobs from there. It has no GPU, so don't train on it. Coding assistants (Claude Code, Codex) can't run there either. They run inside a job. |
+| **Jumphost** | The shared computer you log into. You edit code and start jobs from there. It has no GPU, so don't train on it. Coding assistants (Claude Code, Codex, Antigravity) can't run there either. They run inside a job. |
 | **NAS** | The lab's network storage. Your folder is `/mnt/cvlab/scratch/cvlab/home/YOUR_USERNAME`. The jumphost and all your jobs see the same folder, a bit like a shared drive. Keep your code, data and results here (see [Where your files go](#where-your-files-go)). |
 | **Job** | One run of your program on the cluster, with the GPUs, CPUs and memory you asked for. It starts once resources are free and stops when your program ends or when you delete it. |
 | **Interactive job** | A job that gives you a terminal on a GPU machine, for testing and debugging. |
@@ -175,7 +175,7 @@ Copy the token straight away, because you only get to see it once. Use HTTPS rep
 
 </details>
 
-Jobs run on the lab's default image, `registry.rcp.epfl.ch/cvlab-pancey/base:0.4`. It comes with CUDA, cuDNN, TensorRT, Python, uv and JupyterLab.
+Jobs run on the lab's default image, `registry.rcp.epfl.ch/cvlab-pancey/base:0.5`. It comes with CUDA, cuDNN, TensorRT, Python, Node.js, uv and JupyterLab.
 
 <details>
 <summary>Did your supervisor give you a different image?</summary>
@@ -240,13 +240,14 @@ You're all set. If you like, set up a coding assistant next, then [run your own 
 
 ## 4. (Optional) Set up a coding assistant
 
-Coding assistants keep getting more popular and more capable. They're most useful when they can run your code themselves, so this setup supports them out of the box. Claude Code and Codex can't run on the jumphost. They run inside a job instead, which also gives them a GPU. You install them once. They live in your NAS home along with their logins and conversations, so every job after that has them.
+Coding assistants keep getting more popular and more capable. They're most useful when they can run your code themselves, so this setup supports them out of the box. Claude Code, Codex and Antigravity can't run on the jumphost. They run inside a job instead, which also gives them a GPU. You install them once. They live in your NAS home along with their logins and conversations, so every job after that has them.
 
 ```bash
 dev                                                 # on the jumphost
-bash "$NAS_HOME/RCP_tutorial/setup-agents.sh"       # inside the job: installs both
+bash "$NAS_HOME/RCP_tutorial/setup-agents.sh"       # inside the job: installs all three
 claude                       # log in to Claude Code: follow the link it prints
 codex login --device-auth    # log in to Codex: enter the code it prints in your browser
+agy                          # log in to Antigravity: choose Google OAuth, open the link, paste the code back
 ```
 
 After that, here's how to start an assistant in a job:
@@ -254,7 +255,7 @@ After that, here's how to start an assistant in a job:
 ```bash
 dev                          # on the jumphost, in your project folder
 tmux new -A -s agent         # inside the job: keeps the assistant running if your connection drops
-claude                       # or: codex
+claude                       # or: codex, agy
 ```
 
 [Coding assistants](guides/agents.md) explains how to run several assistants side by side with `windows`, and how to let them use the cluster for your project (start training jobs, read logs, clean up). Delete the job when you're done: `runai delete job dev`.
@@ -310,7 +311,7 @@ The NAS is not backed up, so we recommend using Git to track, version and save y
 ## Guides
 
 - [Daily work on the cluster](guides/cluster.md): your project, `dev`, training jobs and Python packages. Start here.
-- [Coding assistants](guides/agents.md): give Claude Code or Codex what it needs to use RCP in your project.
+- [Coding assistants](guides/agents.md): give Claude Code, Codex or Antigravity what it needs to use RCP in your project.
 - [Add RCP to any repository](rcp/README.md): the `rcp/` folder you copy into your projects.
 - [Jupyter](guides/jupyter.md): open a notebook that runs in a job from the browser on your laptop.
 - [Laptop and cluster](guides/hybrid.md): use Git to switch between your own machine and the jumphost.
