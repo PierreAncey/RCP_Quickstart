@@ -8,10 +8,21 @@
       "Bash(runai describe job:*)",
       "Bash(runai logs:*)"
     ],
+    "ask": [
+      "Bash(rm:*)"
+    ],
     "deny": [
       "Bash(runai delete:*)",
       "Bash(runai submit:*)",
       "Bash(rm -rf:*)",
+      "Bash(rm -fr:*)",
+      "Bash(rm -Rf:*)",
+      "Bash(rm -fR:*)",
+      "Bash(rm -r:*)",
+      "Bash(rm -R:*)",
+      "Bash(rm -f -r:*)",
+      "Bash(rm -f -R:*)",
+      "Bash(rm --recursive:*)",
       "Bash(git reset --hard:*)",
       "Bash(git clean:*)",
       "Bash(git push --force:*)",

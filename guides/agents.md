@@ -98,10 +98,21 @@ cp rcp/claude-settings.json .claude/settings.json
 Whatever the assistant decides, these settings also block:
 - deleting jobs directly with `runai delete` (it has to use `rcp/stop.sh`, which won't touch your `dev` job or other projects' jobs)
 - starting jobs with `runai submit` (it has to use `rcp/train.sh`, which keeps a log and a copy of the code)
-- `rm -rf`, and any edit in your `datasets` folder
+- recursive deletes (`rm -rf`, `rm -r` and similar), and any edit in your `datasets` folder. Any other `rm` always asks first
 - Git commands that throw away work: `git reset --hard`, `git clean`, `git push --force`, `git branch -D`, `git checkout -- …`, `git restore`, `git stash drop`.
 
 Training jobs can't overwrite each other either, since `train.sh` refuses a name that was already used.
+
+These rules catch the usual form of a command, not every way of doing the same thing. A script or `bash -c '...'` can get past them, so they don't replace your own care. Don't turn approvals off with `--dangerously-skip-permissions` (Claude Code, Antigravity) or `--dangerously-bypass-approvals-and-sandbox` (Codex), since that can remove this protection.
+
+### Codex and Antigravity
+
+`setup-agents.sh` installs the same rules for these two in your home folder, so they apply to all your projects. If you installed the assistants before these rules existed, run `setup-agents.sh` again. It keeps your own settings.
+
+| Assistant | Rules installed in | How to change them |
+| --- | --- | --- |
+| Codex | `~/.codex/rules/rcp.rules` | Add your own to `~/.codex/rules/default.rules`, because `setup-agents.sh` replaces `rcp.rules`. See the [Codex rules docs](https://learn.chatgpt.com/docs/agent-configuration/rules). |
+| Antigravity | `~/.gemini/antigravity-cli/settings.json` | Edit the file. See the [Antigravity permissions docs](https://antigravity.google/docs/permissions). |
 
 <details>
 <summary>Your project already has a <code>.claude/settings.json</code>?</summary>

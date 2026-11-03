@@ -1,0 +1,38 @@
+# Codex rules for RCP. setup-agents.sh copies this file to ~/.codex/rules/rcp.rules,
+# replacing the old copy, so keep your own rules in ~/.codex/rules/default.rules.
+# The most restrictive matching rule wins: forbidden, then prompt, then allow.
+
+# Job commands run without asking.
+prefix_rule(pattern = ["bash", ["rcp/train.sh", "rcp/wait.sh", "rcp/stop.sh"]], decision = "allow")
+prefix_rule(pattern = ["runai", "list"], decision = "allow")
+prefix_rule(pattern = ["runai", "describe", "job"], decision = "allow")
+prefix_rule(pattern = ["runai", "logs"], decision = "allow")
+
+# Jobs go through rcp/train.sh and rcp/stop.sh.
+prefix_rule(
+    pattern = ["runai", ["delete", "submit"]],
+    decision = "forbidden",
+    justification = "Use rcp/train.sh and rcp/stop.sh.",
+    match = ["runai delete job dev"],
+)
+
+# Recursive deletes are blocked. Any other rm asks first.
+prefix_rule(
+    pattern = ["rm", ["-rf", "-fr", "-Rf", "-fR", "-r", "-R", "--recursive"]],
+    decision = "forbidden",
+    justification = "Recursive deletes are blocked. Ask the user to do it.",
+    match = ["rm -rf build", "rm -fr build", "rm -r build"],
+    not_match = ["rm file.txt"],
+)
+prefix_rule(pattern = ["rm", "-f", ["-r", "-R"]], decision = "forbidden", match = ["rm -f -r build"])
+prefix_rule(pattern = ["rm"], decision = "prompt", match = ["rm file.txt"])
+
+# Git commands that discard work.
+prefix_rule(pattern = ["git", "reset", "--hard"], decision = "forbidden")
+prefix_rule(pattern = ["git", "clean"], decision = "forbidden")
+prefix_rule(pattern = ["git", "push", ["--force", "-f", "--force-with-lease"]], decision = "forbidden")
+prefix_rule(pattern = ["git", "branch", "-D"], decision = "forbidden")
+prefix_rule(pattern = ["git", "checkout", ["--", "."]], decision = "forbidden")
+prefix_rule(pattern = ["git", "restore"], decision = "forbidden")
+prefix_rule(pattern = ["git", "stash", ["drop", "clear"]], decision = "forbidden")
+prefix_rule(pattern = ["git", "worktree", "remove", "--force"], decision = "forbidden")

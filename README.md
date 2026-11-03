@@ -260,6 +260,16 @@ claude                       # or: codex, agy
 
 [Coding assistants](guides/agents.md) explains how to run several assistants side by side with `windows`, and how to let them use the cluster for your project (start training jobs, read logs, clean up). Delete the job when you're done: `runai delete job dev`.
 
+> [!WARNING]
+> **You're responsible for what your tools do, and that includes AI software.** If an assistant deletes data, overwrites someone's work, leaks something or wastes shared GPUs, the responsibility stays with you, not the tool. So stay careful:
+> - **The rules only catch the usual commands.** This setup blocks the most harmful ones, such as `rm -rf`, `git reset --hard` and `runai delete`, but an assistant can often do the same damage another way, for example from a script.
+> - **Check before you approve,** and don't turn approvals off (`--dangerously-skip-permissions` or similar).
+> - **Shared data is within reach.** Jobs mount the lab's whole scratch volume, so an assistant may be able to change other people's files as well as yours. Keep your own work in Git and backed up.
+> - **Your data leaves the cluster.** Assistants send the code and files they read to the company behind them. Don't let them read unpublished or restricted data unless you're allowed to share it.
+> - **Your logins are within reach too,** and a malicious file or web page can trick an assistant into misusing them. Be wary of pointing it at content you don't trust.
+>
+> To change the rules for Claude Code, edit `rcp/claude-settings.json` before copying it into a project (the copy is `.claude/settings.json`), and see the [Claude Code permissions docs](https://code.claude.com/docs/en/permissions). [Coding assistants](guides/agents.md#let-claude-code-run-job-commands-without-asking) covers Codex and Antigravity.
+
 ---
 
 ## Where your files go

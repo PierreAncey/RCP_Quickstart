@@ -120,7 +120,7 @@ ours, path = json.load(open(sys.argv[1])), sys.argv[2]
 theirs = json.load(open(path))
 added = 0
 perms = theirs.setdefault("permissions", {})
-for key in ("allow", "deny"):
+for key in ("allow", "ask", "deny"):
     rules = perms.setdefault(key, [])
     for rule in ours["permissions"][key]:
         if rule not in rules:

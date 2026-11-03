@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "command(bash rcp/train.sh)",
+      "command(bash rcp/wait.sh)",
+      "command(bash rcp/stop.sh)",
+      "command(runai list)",
+      "command(runai describe job)",
+      "command(runai logs)"
+    ],
+    "ask": [
+      "command(rm)"
+    ],
+    "deny": [
+      "command(runai delete)",
+      "command(runai submit)",
+      "command(rm -rf)",
+      "command(rm -fr)",
+      "command(rm -Rf)",
+      "command(rm -fR)",
+      "command(rm -r)",
+      "command(rm -R)",
+      "command(rm -f -r)",
+      "command(rm -f -R)",
+      "command(rm --recursive)",
+      "command(git reset --hard)",
+      "command(git clean)",
+      "command(git push --force)",
+      "command(git push -f)",
+      "command(git push --force-with-lease)",
+      "command(git branch -D)",
+      "command(git checkout --)",
+      "command(git checkout .)",
+      "command(git restore)",
+      "command(git stash drop)",
+      "command(git stash clear)",
+      "command(git worktree remove --force)"
+    ]
+  }
+}
